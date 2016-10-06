@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block body %}
+<table>
+    <tr><th>Hostname</th><th>MAC</th><th>IP</th><th>Accendere</th><TH>Inoltra WOL</th><th>Elimina</th></tr>
+  {% for pc in computers%}
+  <tr id="{{ pc.name }}"><td>{{ pc.name }}</td><td>{{ pc.mac }}</td><td>{{ pc.ip }}</td><td><img id="state-{{ pc.name }}" class="clickimg" width=20 src="static/img/{{ pc.enabled }}.svg" onclick="toggle('{{ pc.name }}','{{ pc.enabled }}')"></td><td><img class="clickimg" width=20 src="static/img/{{ pc.iswol }}.svg"></td><td><img class="clickimg" src="static/img/trash.svg" width=25 onclick="elimina('{{ pc.name }}')"></td></tr>
+  {% else %}
+  <tr><td>Unbelievable..  No computers so far</td></tr>
+  {% endfor %}
+</table>
+  <a href="/nuovopc/"><button>Nuovo pc</button></a>
+<script>
+function elimina(record) {
+  console.log('Ciao hai chiamato elimina per il record:'+record);
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.status == 201) {
+      document.getElementById(record).remove();
+      console.log('Eliminato computer '+record);
+    }
+    else {
+        console.log('Status ricevuto:'+this.status);
+    }
+  };
+  xhttp.open("POST", "/computers/"+record+"/remove/", true);
+  xhttp.send();
+}
+function toggle(record,state) {
+    console.log('Ciao, hai chiamato toggle per il record:'+record+' nello stato '+state);
+    if (state == "1") {
+        console.log('Disabilito accensione per '+record);
+        disable(record);
+    }
+    else {
+        console.log('Abilito accensione per '+record);
+        enable(record);
+    }
+}
+function enable(record) {
+  console.log('Ciao sei dentro enable')
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.status == 201) {
+      //document.getElementById(record).remove();
+      img = document.getElementById("state-"+record);
+      img.src = 'static/img/1.svg';
+      document.getElementById("state-"+record).onclick = function(){ toggle(record,1); } ;
+      console.log('Abilitata accensione per computer '+record);
+    }
+    else {
+        console.log('Status ricevuto:'+this.status);
+    }
+  };
+  xhttp.open("POST", "/computers/"+record+"/enable/", true);
+  xhttp.send();
+}
+function disable(record) {
+  console.log('Ciao sei dentro disable')
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.status == 201) {
+      //document.getElementById(record).remove();
+      img = document.getElementById("state-"+record);
+      img.src = 'static/img/0.svg';
+      document.getElementById("state-"+record).onclick = function(){ toggle(record,0); } ;
+      console.log('Disabilitata accensione per computer '+record);
+    }
+    else {
+        console.log('Status ricevuto:'+this.status);
+    }
+  };
+  xhttp.open("POST", "/computers/"+record+"/disable/", true);
+  xhttp.send();
+}
+</script>
+{% endblock %}

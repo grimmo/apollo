@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Aggiungi un nuovo computer</h2>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('nuovopc') }}" method=post>
+    <dl>
+      <dt>Hostname:
+      <dd><input type=text name=name>
+      <dt>MAC Address:
+      <dd><input type=text name=mac>
+      <dt>Questo computer invier&agrave; i pacchetti WOL agli altri pc della sottorete?
+      <!-- riquadro wol -->
+      <dd><input type="checkbox" name="is_wol_node" value="1" />Si
+      <dd><input type=submit value=Aggiungi>
+    </dl>
+  </form>
+{% endblock %}
