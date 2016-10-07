@@ -22,6 +22,13 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
+def init_db():
+    with app.app_context():
+        db = get_db()
+        with app.open_resource('apollo_schema.sql', mode='r') as f:
+            db.cursor().executescript(f.read())
+        db.commit()
+
 def connect_db():
     """Connects to the specific database."""
     rv = sqlite3.connect(app.config['DATABASE'])

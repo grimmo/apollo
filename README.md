@@ -32,3 +32,46 @@ http://<server_address>/computers/<hostname>/remove/
 to remove a computer from the list.
 
 no HTTPS or authentication is supported at the moment. This project is still in early stage.
+
+
+## Installation
+
+This project requires *Python 2.7.x* and *Flask 0.11*
+
+```bash
+git clone https://github.com/grimmo/apollo.git
+virtualenv --python=python2.7 venv
+source venv/bin/activate
+pip install -r ./requirements.txt
+```
+
+Create the database using the schema provided in apollo_schema.sql:
+
+```bash
+python
+>>>from apollo import init_db  
+>>>init_db()
+```
+
+Exit the Python interpreter with Ctrl-D
+
+Prepare to run Flask
+
+```bash
+export FLASK_APP=apollo.py
+export FLASK_DEBUG=1
+flask run
+```
+
+If everything is ok, your output should be similar to this:
+```bash
+ * Serving Flask app "apollo"
+ * Forcing debug mode on
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger pin code: XXX-XXX-XXX
+```
+
+
+That's it!
