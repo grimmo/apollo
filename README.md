@@ -37,6 +37,7 @@ no HTTPS or authentication is supported at the moment. This project is still in 
 ## Installation
 
 This project requires *Python 2.7.x* and *Flask 0.11*
+Use of virtualenv is recommended.
 
 ```bash
 git clone https://github.com/grimmo/apollo.git
