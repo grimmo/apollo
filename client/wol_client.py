@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Apollo WakeOnLAN client
 # 
 # gets a list of mac addresses to send WOL packets to
@@ -6,9 +6,8 @@
 
 import struct, socket
 from time import sleep
-from string import upper
 import logging
-import ConfigParser
+import configparser
 import requests
 import json
 import argparse
@@ -31,7 +30,7 @@ def WakeOnLan(ethernet_address):
 
   # Build the Wake-On-LAN "Magic Packet"...
 
-  msg = '\xff' * 6 + hw_addr * 16
+  msg = '\xff'.encode('utf-8') * 6 + hw_addr * 16
 
   # ...and send it to the broadcast address using UDP
 
@@ -45,7 +44,7 @@ def register(server,port,macaddress,as_node=0):
 
 
 logging.basicConfig(filename='wol_client.log',level=logging.DEBUG,format='%(asctime)s %(message)s')
-print "Apollo WakeOnLAN client 0.5 alpha\n\n"
+print("Apollo WakeOnLAN client 0.51 alpha\n\n")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--register","-r",help="aggiungi computer sul server Wake On LAN", dest="register",action="store_true")
@@ -60,24 +59,24 @@ except Exception, err:
        raise
 print "Hostname is %s" % hostname
 """
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 # Legge il file INI di configurazione
 try:
     config.read('wol_client.ini')
-except Exception, err:
+except Exception as err:
     logging.exception('Error opening wol_client.ini')
     raise
 try:
     livello_log = 'logging.%s' % config.get('DEFAULT','log_level')
     server_host = config.get('DEFAULT','server_host')
     server_port = config.get('DEFAULT','server_port')
-except Exception, err:
+except Exception as err:
     logging.exception('ERROR:Error reading wol_client.ini')
     raise
 logging.info('Attempting to contact WOL server at %s:%s' % (server_host,server_port))
 try:
     da_risvegliare = requests.get('http://%s:%s/wakeuplist/' % (server_host,server_port)).json()
-except Exception,err:
+except Exception as err:
     logging.exception('ERROR:Unable to contact server %s:%s' % (server_host,server_port))
     raise
 else:
