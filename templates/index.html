@@ -72,5 +72,23 @@ function disable(record) {
   xhttp.open("POST", "/computers/"+record+"/disable/", true);
   xhttp.send();
 }
+function enable_wol(record) {
+  console.log('Ciao sei dentro enable_wol')
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.status == 201) {
+      //document.getElementById(record).remove();
+      img = document.getElementById("state-"+record);
+      img.src = 'static/img/1.svg';
+      document.getElementById("state-"+record).onclick = function(){ toggle(record,1); } ;
+      console.log('Abilitata accensione per computer '+record);
+    }
+    else {
+        console.log('Status ricevuto:'+this.status);
+    }
+  };
+  xhttp.open("POST", "/computers/"+record+"/wolnode/activate/", true);
+  xhttp.send();
+}
 </script>
 {% endblock %}
